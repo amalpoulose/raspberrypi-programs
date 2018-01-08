@@ -15,7 +15,7 @@ pinMode(2,OUTPUT);
 pinMode(3,OUTPUT);
 }
 
-int adc_read()
+int adc_read(int channel)
 {
  digitalWrite(cs,0);
  /*start bit*/
@@ -32,12 +32,12 @@ int adc_read()
  digitalWrite(scl,1);
  /* d1 */
  digitalWrite(scl,0);
- digitalWrite(mosi,0);
+ digitalWrite(mosi,channel>>1);
  digitalWrite(scl,1);
 
  /* d0 */
  digitalWrite(scl,0);
- digitalWrite(mosi,0);
+ digitalWrite(mosi,channel&1);
  digitalWrite(scl,1);
 
  /* T sample bit dont´t care*/
@@ -59,7 +59,6 @@ int adc_read()
      data |=(1<<i);
  digitalWrite(scl,1);
  }
- printf("%d\n",data);
  digitalWrite(cs,1);
  return data;
 }
@@ -72,8 +71,8 @@ int data;
 while(1)
 {
 system("clear");
-data=adc_read();
-printf("%d\n",data);
+data=adc_read(0);
+printf("channel : %d\n",data);
 sleep(1);
 }
 }
