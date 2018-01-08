@@ -17,7 +17,7 @@ def setup():
 	gpio.setup(scl,gpio.OUT)
 	
 
-def adc_read():
+def adc_read(channel):
 	
 	# chip select 0
 	gpio.output(cs,False)
@@ -39,12 +39,12 @@ def adc_read():
 	
 	# d1 bit
 	gpio.output(scl,False)
-	gpio.output(mosi,False)
+	gpio.output(mosi,channel>>1)
 	gpio.output(scl,True)
 	
 	# d2 bit
 	gpio.output(scl,False)
-	gpio.output(mosi,False)
+	gpio.output(mosi,channel&1)
 	gpio.output(scl,True)
 	
 	# Tsample bit
@@ -70,7 +70,7 @@ def main():
 	setup()
 	while(1):
 		os.system("clear")
-		data=adc_read()
+		data=adc_read(0)
 		print "channel : ", data
 		time.sleep(1)
 
